@@ -13,82 +13,117 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as PublicLayoutImport } from './routes/_public-layout'
 
 // Create Virtual Routes
 
-const AboutLazyImport = createFileRoute('/about')()
-const IndexLazyImport = createFileRoute('/')()
+const PublicLayoutIndexLazyImport = createFileRoute('/_public-layout/')()
+const PublicLayoutLoginLazyImport = createFileRoute('/_public-layout/login')()
 
 // Create/Update Routes
 
-const AboutLazyRoute = AboutLazyImport.update({
-  id: '/about',
-  path: '/about',
+const PublicLayoutRoute = PublicLayoutImport.update({
+  id: '/_public-layout',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
+} as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const PublicLayoutIndexLazyRoute = PublicLayoutIndexLazyImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+  getParentRoute: () => PublicLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_public-layout/index.lazy').then((d) => d.Route),
+)
+
+const PublicLayoutLoginLazyRoute = PublicLayoutLoginLazyImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_public-layout/login.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+    '/_public-layout': {
+      id: '/_public-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
+    '/_public-layout/login': {
+      id: '/_public-layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLayoutLoginLazyImport
+      parentRoute: typeof PublicLayoutImport
+    }
+    '/_public-layout/': {
+      id: '/_public-layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicLayoutIndexLazyImport
+      parentRoute: typeof PublicLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface PublicLayoutRouteChildren {
+  PublicLayoutLoginLazyRoute: typeof PublicLayoutLoginLazyRoute
+  PublicLayoutIndexLazyRoute: typeof PublicLayoutIndexLazyRoute
+}
+
+const PublicLayoutRouteChildren: PublicLayoutRouteChildren = {
+  PublicLayoutLoginLazyRoute: PublicLayoutLoginLazyRoute,
+  PublicLayoutIndexLazyRoute: PublicLayoutIndexLazyRoute,
+}
+
+const PublicLayoutRouteWithChildren = PublicLayoutRoute._addFileChildren(
+  PublicLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/about': typeof AboutLazyRoute
+  '': typeof PublicLayoutRouteWithChildren
+  '/login': typeof PublicLayoutLoginLazyRoute
+  '/': typeof PublicLayoutIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/about': typeof AboutLazyRoute
+  '/login': typeof PublicLayoutLoginLazyRoute
+  '/': typeof PublicLayoutIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/about': typeof AboutLazyRoute
+  '/_public-layout': typeof PublicLayoutRouteWithChildren
+  '/_public-layout/login': typeof PublicLayoutLoginLazyRoute
+  '/_public-layout/': typeof PublicLayoutIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '' | '/login' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/login' | '/'
+  id:
+    | '__root__'
+    | '/_public-layout'
+    | '/_public-layout/login'
+    | '/_public-layout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  AboutLazyRoute: typeof AboutLazyRoute
+  PublicLayoutRoute: typeof PublicLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  AboutLazyRoute: AboutLazyRoute,
+  PublicLayoutRoute: PublicLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -101,15 +136,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/about"
+        "/_public-layout"
       ]
     },
-    "/": {
-      "filePath": "index.lazy.tsx"
+    "/_public-layout": {
+      "filePath": "_public-layout.tsx",
+      "children": [
+        "/_public-layout/login",
+        "/_public-layout/"
+      ]
     },
-    "/about": {
-      "filePath": "about.lazy.tsx"
+    "/_public-layout/login": {
+      "filePath": "_public-layout/login.lazy.tsx",
+      "parent": "/_public-layout"
+    },
+    "/_public-layout/": {
+      "filePath": "_public-layout/index.lazy.tsx",
+      "parent": "/_public-layout"
     }
   }
 }
