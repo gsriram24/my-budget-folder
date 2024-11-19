@@ -55,6 +55,7 @@ const formSchema = z
 function Signup() {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -84,7 +85,7 @@ function Signup() {
 			setError(error.message);
 		} else {
 			setError(null);
-			// Redirect or perform other actions on successful signup
+			window.location.reload();
 		}
 		setLoading(false);
 	};

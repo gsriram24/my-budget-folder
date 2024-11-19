@@ -29,7 +29,6 @@ const formSchema = z.object({
 function Login() {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
-
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -50,7 +49,7 @@ function Login() {
 			setError(error.message);
 		} else {
 			setError(null);
-			// Redirect or perform other actions on successful login
+			window.location.reload();
 		}
 		setLoading(false);
 	};

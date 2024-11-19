@@ -4,7 +4,7 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 interface MyRouterContext {
-	session: SessionContext;
+	auth: SessionContext;
 }
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	component: RootComponent,

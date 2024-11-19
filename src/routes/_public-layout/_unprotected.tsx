@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_public-layout/_unprotected")({
 	beforeLoad: ({ context, location }) => {
-		if (context.session) {
+		if (context.auth.session) {
 			throw redirect({
 				to: "/dashboard",
 				search: {

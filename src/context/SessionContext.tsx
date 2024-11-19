@@ -25,11 +25,8 @@ export const SessionProvider = ({ children }: Props) => {
 	useEffect(() => {
 		const authStateListener = supabase.auth.onAuthStateChange(
 			async (_, session: Session | null) => {
-				setTimeout(async () => {
-					console.log(session);
-					setSession(session);
-					setIsLoading(false);
-				}, 0);
+				setSession(session);
+				setIsLoading(false);
 			}
 		);
 

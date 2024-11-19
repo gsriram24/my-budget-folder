@@ -12,7 +12,7 @@ const router = createRouter({
 	routeTree,
 	defaultPreload: "intent",
 	context: {
-		session: undefined!, // This will be set after we wrap the app in an AuthProvider
+		auth: undefined!, // This will be set after we wrap the app in an AuthProvider
 	},
 });
 
@@ -25,7 +25,7 @@ declare module "@tanstack/react-router" {
 
 function InnerApp() {
 	const session = useSession();
-	return <RouterProvider router={router} context={{ session }} />;
+	return <RouterProvider router={router} context={{ auth: session }} />;
 }
 
 // Render the app
