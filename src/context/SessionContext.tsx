@@ -21,12 +21,14 @@ type Props = { children: React.ReactNode };
 export const SessionProvider = ({ children }: Props) => {
 	const [session, setSession] = useState<Session | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	console.log(isLoading);
 	useEffect(() => {
 		const authStateListener = supabase.auth.onAuthStateChange(
 			async (_, session: Session | null) => {
-				setSession(session);
-				setIsLoading(false);
+				setTimeout(async () => {
+					console.log(session);
+					setSession(session);
+					setIsLoading(false);
+				}, 0);
 			}
 		);
 

@@ -14,16 +14,29 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as PublicLayoutImport } from './routes/_public-layout'
+import { Route as AuthLayoutImport } from './routes/_auth-layout'
+import { Route as PublicLayoutUnprotectedImport } from './routes/_public-layout/_unprotected'
+import { Route as AuthLayoutDashboardImport } from './routes/_auth-layout/dashboard'
 
 // Create Virtual Routes
 
 const PublicLayoutIndexLazyImport = createFileRoute('/_public-layout/')()
-const PublicLayoutLoginLazyImport = createFileRoute('/_public-layout/login')()
+const PublicLayoutUnprotectedSignupLazyImport = createFileRoute(
+  '/_public-layout/_unprotected/signup',
+)()
+const PublicLayoutUnprotectedLoginLazyImport = createFileRoute(
+  '/_public-layout/_unprotected/login',
+)()
 
 // Create/Update Routes
 
 const PublicLayoutRoute = PublicLayoutImport.update({
   id: '/_public-layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLayoutRoute = AuthLayoutImport.update({
+  id: '/_auth-layout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -35,18 +48,50 @@ const PublicLayoutIndexLazyRoute = PublicLayoutIndexLazyImport.update({
   import('./routes/_public-layout/index.lazy').then((d) => d.Route),
 )
 
-const PublicLayoutLoginLazyRoute = PublicLayoutLoginLazyImport.update({
-  id: '/login',
-  path: '/login',
+const PublicLayoutUnprotectedRoute = PublicLayoutUnprotectedImport.update({
+  id: '/_unprotected',
   getParentRoute: () => PublicLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_public-layout/login.lazy').then((d) => d.Route),
-)
+} as any)
+
+const AuthLayoutDashboardRoute = AuthLayoutDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const PublicLayoutUnprotectedSignupLazyRoute =
+  PublicLayoutUnprotectedSignupLazyImport.update({
+    id: '/signup',
+    path: '/signup',
+    getParentRoute: () => PublicLayoutUnprotectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_public-layout/_unprotected/signup.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const PublicLayoutUnprotectedLoginLazyRoute =
+  PublicLayoutUnprotectedLoginLazyImport.update({
+    id: '/login',
+    path: '/login',
+    getParentRoute: () => PublicLayoutUnprotectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_public-layout/_unprotected/login.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth-layout': {
+      id: '/_auth-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthLayoutImport
+      parentRoute: typeof rootRoute
+    }
     '/_public-layout': {
       id: '/_public-layout'
       path: ''
@@ -54,11 +99,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/_public-layout/login': {
-      id: '/_public-layout/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof PublicLayoutLoginLazyImport
+    '/_auth-layout/dashboard': {
+      id: '/_auth-layout/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthLayoutDashboardImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_public-layout/_unprotected': {
+      id: '/_public-layout/_unprotected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicLayoutUnprotectedImport
       parentRoute: typeof PublicLayoutImport
     }
     '/_public-layout/': {
@@ -68,18 +120,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLayoutIndexLazyImport
       parentRoute: typeof PublicLayoutImport
     }
+    '/_public-layout/_unprotected/login': {
+      id: '/_public-layout/_unprotected/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLayoutUnprotectedLoginLazyImport
+      parentRoute: typeof PublicLayoutUnprotectedImport
+    }
+    '/_public-layout/_unprotected/signup': {
+      id: '/_public-layout/_unprotected/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof PublicLayoutUnprotectedSignupLazyImport
+      parentRoute: typeof PublicLayoutUnprotectedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthLayoutRouteChildren {
+  AuthLayoutDashboardRoute: typeof AuthLayoutDashboardRoute
+}
+
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutDashboardRoute: AuthLayoutDashboardRoute,
+}
+
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
+)
+
+interface PublicLayoutUnprotectedRouteChildren {
+  PublicLayoutUnprotectedLoginLazyRoute: typeof PublicLayoutUnprotectedLoginLazyRoute
+  PublicLayoutUnprotectedSignupLazyRoute: typeof PublicLayoutUnprotectedSignupLazyRoute
+}
+
+const PublicLayoutUnprotectedRouteChildren: PublicLayoutUnprotectedRouteChildren =
+  {
+    PublicLayoutUnprotectedLoginLazyRoute:
+      PublicLayoutUnprotectedLoginLazyRoute,
+    PublicLayoutUnprotectedSignupLazyRoute:
+      PublicLayoutUnprotectedSignupLazyRoute,
+  }
+
+const PublicLayoutUnprotectedRouteWithChildren =
+  PublicLayoutUnprotectedRoute._addFileChildren(
+    PublicLayoutUnprotectedRouteChildren,
+  )
+
 interface PublicLayoutRouteChildren {
-  PublicLayoutLoginLazyRoute: typeof PublicLayoutLoginLazyRoute
+  PublicLayoutUnprotectedRoute: typeof PublicLayoutUnprotectedRouteWithChildren
   PublicLayoutIndexLazyRoute: typeof PublicLayoutIndexLazyRoute
 }
 
 const PublicLayoutRouteChildren: PublicLayoutRouteChildren = {
-  PublicLayoutLoginLazyRoute: PublicLayoutLoginLazyRoute,
+  PublicLayoutUnprotectedRoute: PublicLayoutUnprotectedRouteWithChildren,
   PublicLayoutIndexLazyRoute: PublicLayoutIndexLazyRoute,
 }
 
@@ -88,41 +184,56 @@ const PublicLayoutRouteWithChildren = PublicLayoutRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
-  '': typeof PublicLayoutRouteWithChildren
-  '/login': typeof PublicLayoutLoginLazyRoute
+  '': typeof PublicLayoutUnprotectedRouteWithChildren
+  '/dashboard': typeof AuthLayoutDashboardRoute
   '/': typeof PublicLayoutIndexLazyRoute
+  '/login': typeof PublicLayoutUnprotectedLoginLazyRoute
+  '/signup': typeof PublicLayoutUnprotectedSignupLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/login': typeof PublicLayoutLoginLazyRoute
+  '': typeof PublicLayoutUnprotectedRouteWithChildren
+  '/dashboard': typeof AuthLayoutDashboardRoute
   '/': typeof PublicLayoutIndexLazyRoute
+  '/login': typeof PublicLayoutUnprotectedLoginLazyRoute
+  '/signup': typeof PublicLayoutUnprotectedSignupLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/_auth-layout': typeof AuthLayoutRouteWithChildren
   '/_public-layout': typeof PublicLayoutRouteWithChildren
-  '/_public-layout/login': typeof PublicLayoutLoginLazyRoute
+  '/_auth-layout/dashboard': typeof AuthLayoutDashboardRoute
+  '/_public-layout/_unprotected': typeof PublicLayoutUnprotectedRouteWithChildren
   '/_public-layout/': typeof PublicLayoutIndexLazyRoute
+  '/_public-layout/_unprotected/login': typeof PublicLayoutUnprotectedLoginLazyRoute
+  '/_public-layout/_unprotected/signup': typeof PublicLayoutUnprotectedSignupLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/'
+  fullPaths: '' | '/dashboard' | '/' | '/login' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/'
+  to: '' | '/dashboard' | '/' | '/login' | '/signup'
   id:
     | '__root__'
+    | '/_auth-layout'
     | '/_public-layout'
-    | '/_public-layout/login'
+    | '/_auth-layout/dashboard'
+    | '/_public-layout/_unprotected'
     | '/_public-layout/'
+    | '/_public-layout/_unprotected/login'
+    | '/_public-layout/_unprotected/signup'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
   PublicLayoutRoute: typeof PublicLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
   PublicLayoutRoute: PublicLayoutRouteWithChildren,
 }
 
@@ -136,23 +247,46 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/_auth-layout",
         "/_public-layout"
+      ]
+    },
+    "/_auth-layout": {
+      "filePath": "_auth-layout.tsx",
+      "children": [
+        "/_auth-layout/dashboard"
       ]
     },
     "/_public-layout": {
       "filePath": "_public-layout.tsx",
       "children": [
-        "/_public-layout/login",
+        "/_public-layout/_unprotected",
         "/_public-layout/"
       ]
     },
-    "/_public-layout/login": {
-      "filePath": "_public-layout/login.lazy.tsx",
-      "parent": "/_public-layout"
+    "/_auth-layout/dashboard": {
+      "filePath": "_auth-layout/dashboard.tsx",
+      "parent": "/_auth-layout"
+    },
+    "/_public-layout/_unprotected": {
+      "filePath": "_public-layout/_unprotected.tsx",
+      "parent": "/_public-layout",
+      "children": [
+        "/_public-layout/_unprotected/login",
+        "/_public-layout/_unprotected/signup"
+      ]
     },
     "/_public-layout/": {
       "filePath": "_public-layout/index.lazy.tsx",
       "parent": "/_public-layout"
+    },
+    "/_public-layout/_unprotected/login": {
+      "filePath": "_public-layout/_unprotected/login.lazy.tsx",
+      "parent": "/_public-layout/_unprotected"
+    },
+    "/_public-layout/_unprotected/signup": {
+      "filePath": "_public-layout/_unprotected/signup.lazy.tsx",
+      "parent": "/_public-layout/_unprotected"
     }
   }
 }

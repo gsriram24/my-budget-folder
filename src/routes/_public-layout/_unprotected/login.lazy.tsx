@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import ErrorMessage from "@/components/ui/error-message";
+import ErrorMessage from "@/components/custom/error-message";
 import { Input } from "@/components/ui/input";
 import supabase from "@/supabaseClient";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
@@ -17,7 +17,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 
-export const Route = createLazyFileRoute("/_public-layout/login")({
+export const Route = createLazyFileRoute("/_public-layout/_unprotected/login")({
 	component: Login,
 });
 

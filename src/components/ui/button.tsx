@@ -54,12 +54,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		if (props.loading) {
 			props.disabled = true;
 		}
+		delete props.loading;
 		return (
 			<Comp
 				className={cn(buttonVariants({ variant, size, className }))}
 				ref={ref}
 				{...props}
-				children={asChild ? undefined : children}
+				children={children}
 			/>
 		);
 	}

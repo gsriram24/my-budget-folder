@@ -6,7 +6,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
 import "./index.css";
-import { useSession } from "@/context/SessionContext";
+import { SessionProvider, useSession } from "@/context/SessionContext";
 
 // Create a new router instance
 const router = createRouter({
@@ -35,7 +35,9 @@ if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<InnerApp />
+			<SessionProvider>
+				<InnerApp />
+			</SessionProvider>
 		</StrictMode>
 	);
 }

@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { useSession } from "@/context/SessionContext";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/_public-layout/")({
@@ -6,6 +7,7 @@ export const Route = createLazyFileRoute("/_public-layout/")({
 });
 
 function Index() {
+	const { session } = useSession();
 	return (
 		<div className="max-w-3xl">
 			<h1 className="font-extrabold 2xl:text-5xl text-4xl">
@@ -15,9 +17,17 @@ function Index() {
 				Using digital “envelopes”, allocate budgets for your expenses
 				before you make them, to be smart with your expenditure.
 			</p>
-			<Button asChild size="lg" className="mt-8">
-				<Link href="/login">Get Started</Link>
-			</Button>
+
+			<Link
+				className={buttonVariants({
+					variant: "default",
+					className: "mt-8",
+					size: "lg",
+				})}
+				href={session ? "/dashboard" : "/login"}
+			>
+				{session ? "Go to Dashboard" : "Get Started"}
+			</Link>
 		</div>
 	);
 }
