@@ -7,7 +7,6 @@ import { routeTree } from "./routeTree.gen";
 
 import "./index.css";
 import { SessionProvider, useSession } from "@/context/SessionContext";
-
 // Create a new router instance
 const router = createRouter({
 	routeTree,
