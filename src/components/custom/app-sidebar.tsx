@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
 import { Calculator, DollarSign, Home, Mail } from "lucide-react";
+import NavUser from "./nav-user";
 const items = [
 	{
 		title: "Home",
@@ -66,7 +67,9 @@ export function AppSidebar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarFooter />
+			<SidebarFooter>
+				<NavUser />
+			</SidebarFooter>
 		</Sidebar>
 	);
 }
