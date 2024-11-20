@@ -16,6 +16,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as PublicLayoutImport } from './routes/_public-layout'
 import { Route as AuthLayoutImport } from './routes/_auth-layout'
 import { Route as PublicLayoutUnprotectedImport } from './routes/_public-layout/_unprotected'
+import { Route as AuthLayoutIncomeImport } from './routes/_auth-layout/income'
+import { Route as AuthLayoutExpensesImport } from './routes/_auth-layout/expenses'
+import { Route as AuthLayoutEnvelopesImport } from './routes/_auth-layout/envelopes'
 import { Route as AuthLayoutDashboardImport } from './routes/_auth-layout/dashboard'
 
 // Create Virtual Routes
@@ -51,6 +54,24 @@ const PublicLayoutIndexLazyRoute = PublicLayoutIndexLazyImport.update({
 const PublicLayoutUnprotectedRoute = PublicLayoutUnprotectedImport.update({
   id: '/_unprotected',
   getParentRoute: () => PublicLayoutRoute,
+} as any)
+
+const AuthLayoutIncomeRoute = AuthLayoutIncomeImport.update({
+  id: '/income',
+  path: '/income',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutExpensesRoute = AuthLayoutExpensesImport.update({
+  id: '/expenses',
+  path: '/expenses',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutEnvelopesRoute = AuthLayoutEnvelopesImport.update({
+  id: '/envelopes',
+  path: '/envelopes',
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
 const AuthLayoutDashboardRoute = AuthLayoutDashboardImport.update({
@@ -106,6 +127,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutDashboardImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/_auth-layout/envelopes': {
+      id: '/_auth-layout/envelopes'
+      path: '/envelopes'
+      fullPath: '/envelopes'
+      preLoaderRoute: typeof AuthLayoutEnvelopesImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_auth-layout/expenses': {
+      id: '/_auth-layout/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof AuthLayoutExpensesImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_auth-layout/income': {
+      id: '/_auth-layout/income'
+      path: '/income'
+      fullPath: '/income'
+      preLoaderRoute: typeof AuthLayoutIncomeImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/_public-layout/_unprotected': {
       id: '/_public-layout/_unprotected'
       path: ''
@@ -141,10 +183,16 @@ declare module '@tanstack/react-router' {
 
 interface AuthLayoutRouteChildren {
   AuthLayoutDashboardRoute: typeof AuthLayoutDashboardRoute
+  AuthLayoutEnvelopesRoute: typeof AuthLayoutEnvelopesRoute
+  AuthLayoutExpensesRoute: typeof AuthLayoutExpensesRoute
+  AuthLayoutIncomeRoute: typeof AuthLayoutIncomeRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutDashboardRoute: AuthLayoutDashboardRoute,
+  AuthLayoutEnvelopesRoute: AuthLayoutEnvelopesRoute,
+  AuthLayoutExpensesRoute: AuthLayoutExpensesRoute,
+  AuthLayoutIncomeRoute: AuthLayoutIncomeRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
@@ -186,6 +234,9 @@ const PublicLayoutRouteWithChildren = PublicLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof PublicLayoutUnprotectedRouteWithChildren
   '/dashboard': typeof AuthLayoutDashboardRoute
+  '/envelopes': typeof AuthLayoutEnvelopesRoute
+  '/expenses': typeof AuthLayoutExpensesRoute
+  '/income': typeof AuthLayoutIncomeRoute
   '/': typeof PublicLayoutIndexLazyRoute
   '/login': typeof PublicLayoutUnprotectedLoginLazyRoute
   '/signup': typeof PublicLayoutUnprotectedSignupLazyRoute
@@ -194,6 +245,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof PublicLayoutUnprotectedRouteWithChildren
   '/dashboard': typeof AuthLayoutDashboardRoute
+  '/envelopes': typeof AuthLayoutEnvelopesRoute
+  '/expenses': typeof AuthLayoutExpensesRoute
+  '/income': typeof AuthLayoutIncomeRoute
   '/': typeof PublicLayoutIndexLazyRoute
   '/login': typeof PublicLayoutUnprotectedLoginLazyRoute
   '/signup': typeof PublicLayoutUnprotectedSignupLazyRoute
@@ -204,6 +258,9 @@ export interface FileRoutesById {
   '/_auth-layout': typeof AuthLayoutRouteWithChildren
   '/_public-layout': typeof PublicLayoutRouteWithChildren
   '/_auth-layout/dashboard': typeof AuthLayoutDashboardRoute
+  '/_auth-layout/envelopes': typeof AuthLayoutEnvelopesRoute
+  '/_auth-layout/expenses': typeof AuthLayoutExpensesRoute
+  '/_auth-layout/income': typeof AuthLayoutIncomeRoute
   '/_public-layout/_unprotected': typeof PublicLayoutUnprotectedRouteWithChildren
   '/_public-layout/': typeof PublicLayoutIndexLazyRoute
   '/_public-layout/_unprotected/login': typeof PublicLayoutUnprotectedLoginLazyRoute
@@ -212,14 +269,33 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/dashboard' | '/' | '/login' | '/signup'
+  fullPaths:
+    | ''
+    | '/dashboard'
+    | '/envelopes'
+    | '/expenses'
+    | '/income'
+    | '/'
+    | '/login'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/dashboard' | '/' | '/login' | '/signup'
+  to:
+    | ''
+    | '/dashboard'
+    | '/envelopes'
+    | '/expenses'
+    | '/income'
+    | '/'
+    | '/login'
+    | '/signup'
   id:
     | '__root__'
     | '/_auth-layout'
     | '/_public-layout'
     | '/_auth-layout/dashboard'
+    | '/_auth-layout/envelopes'
+    | '/_auth-layout/expenses'
+    | '/_auth-layout/income'
     | '/_public-layout/_unprotected'
     | '/_public-layout/'
     | '/_public-layout/_unprotected/login'
@@ -254,7 +330,10 @@ export const routeTree = rootRoute
     "/_auth-layout": {
       "filePath": "_auth-layout.tsx",
       "children": [
-        "/_auth-layout/dashboard"
+        "/_auth-layout/dashboard",
+        "/_auth-layout/envelopes",
+        "/_auth-layout/expenses",
+        "/_auth-layout/income"
       ]
     },
     "/_public-layout": {
@@ -266,6 +345,18 @@ export const routeTree = rootRoute
     },
     "/_auth-layout/dashboard": {
       "filePath": "_auth-layout/dashboard.tsx",
+      "parent": "/_auth-layout"
+    },
+    "/_auth-layout/envelopes": {
+      "filePath": "_auth-layout/envelopes.tsx",
+      "parent": "/_auth-layout"
+    },
+    "/_auth-layout/expenses": {
+      "filePath": "_auth-layout/expenses.tsx",
+      "parent": "/_auth-layout"
+    },
+    "/_auth-layout/income": {
+      "filePath": "_auth-layout/income.tsx",
       "parent": "/_auth-layout"
     },
     "/_public-layout/_unprotected": {
