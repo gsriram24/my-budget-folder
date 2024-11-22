@@ -30,12 +30,9 @@ export default function NavUser() {
 			<SidebarMenuItem>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<SidebarMenuButton
-							size="lg"
-							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-						>
-							<User2Icon />
-							<div className="grid flex-1 text-left text-sm leading-tight">
+						<SidebarMenuButton size="lg">
+							<User2Icon className="ml-1" />
+							<div className="grid flex-1 ml-1 text-left text-smleading-tight">
 								<span className="truncate font-semibold">
 									{user?.user_metadata.name}
 								</span>

@@ -17,9 +17,11 @@ function RouteComponent() {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<main>
+			<main className="w-full">
 				<SidebarTrigger />
-				<Outlet />
+				<div className="lg:p-12 p-6">
+					<Outlet />
+				</div>
 			</main>
 		</SidebarProvider>
 	);
