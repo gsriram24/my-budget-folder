@@ -22,8 +22,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import useAddOrEditEnvelope from "@/services/useEnvelope";
-import { useState } from "react";
+import { useAddOrEditEnvelope, useEditEnvelope } from "@/services/useEnvelope";
+import { Envelope } from "@/lib/types";
 
 const formSchema = z.object({
   name: z.string().max(255).min(1, "Name is required"),
@@ -32,43 +32,70 @@ const formSchema = z.object({
     .int()
     .min(0, "Budget must be greater than 0"),
 });
+interface AddEditEnvelopeDrawerProps {
+  envelope?: Envelope;
+  isEdit?: boolean;
+  open: boolean;
+  handleOpen: (open: boolean) => void;
+}
 
-function AddCardDrawer() {
-  const [open, setOpen] = useState(false);
-
+function AddEditEnvelopeDrawer({
+  envelope,
+  isEdit,
+  open,
+  handleOpen,
+}: AddEditEnvelopeDrawerProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      allocated_amount: 0,
+      name: envelope?.name || "",
+      allocated_amount: envelope?.allocated_amount || 0,
     },
   });
 
-  const handleClose = () => {
-    form.reset();
-    setOpen(false);
+  const closeModal = () => {
+    form.reset({
+      name: envelope?.name || "",
+      allocated_amount: envelope?.allocated_amount || 0,
+    });
+    handleOpen(false);
   };
 
   const { isPending, mutate } = useAddOrEditEnvelope(
     form.getValues(),
-    handleClose,
+    closeModal,
+  );
+  const { isPending: isEditPending, mutate: editMutate } = useEditEnvelope(
+    envelope!,
+    form.getValues(),
+    closeModal,
   );
 
   const handleSubmit = async () => {
-    mutate();
+    if (isEdit) editMutate();
+    else mutate();
   };
+
+  const text = {
+    title: isEdit ? `Edit ${envelope?.name}` : "New envelope",
+    description: isEdit
+      ? "Ran out of budget? Edit the envelope to increase or decrease your budget."
+      : "Create a new envelope with specified budget to start tracking your new expense. You can add upto 30 envelopes.",
+  };
+
+  const pending = isEditPending || isPending;
+
   return (
-    <Drawer open={open} onOpenChange={setOpen} direction="right">
-      <DrawerTrigger className="w-full">
-        <AddCard label="New envelope" />
-      </DrawerTrigger>
+    <Drawer open={open} onOpenChange={closeModal} direction="right">
+      {!isEdit && (
+        <DrawerTrigger className="w-full">
+          <AddCard label="New envelope" />
+        </DrawerTrigger>
+      )}
       <DrawerContent className="rounded-none">
         <DrawerHeader>
-          <DrawerTitle>New envelope</DrawerTitle>
-          <DrawerDescription>
-            Create a new envelope with specified budget to start tracking your
-            new expense. You can add upto 30 envelopes.
-          </DrawerDescription>
+          <DrawerTitle>{text.title}</DrawerTitle>
+          <DrawerDescription>{text.description}</DrawerDescription>
         </DrawerHeader>
         <Form {...form}>
           <form
@@ -108,11 +135,11 @@ function AddCardDrawer() {
         </Form>
         <DrawerFooter>
           <DrawerClose>
-            <Button disabled={isPending} variant="outline">
+            <Button disabled={pending} variant="outline">
               Cancel
             </Button>
           </DrawerClose>
-          <Button loading={isPending} type="submit" form="create-envelope">
+          <Button loading={pending} type="submit" form="create-envelope">
             Submit
           </Button>
         </DrawerFooter>
@@ -121,4 +148,4 @@ function AddCardDrawer() {
   );
 }
 
-export default AddCardDrawer;
+export default AddEditEnvelopeDrawer;
