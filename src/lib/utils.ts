@@ -1,13 +1,16 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import currencyCode from "@/lib/currency.json";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getCurrencySymbol(currency: string) {
-  return (currencyCode as any)[currency]?.symbol ?? currency;
+export function formatCurrency(currency: string, amount: number) {
+  return amount.toLocaleString("en-US", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 0,
+  });
 }
 
 export function getOneMonthAgo() {

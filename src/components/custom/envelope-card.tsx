@@ -1,12 +1,12 @@
 import { useSession } from "@/context/SessionContext";
 import { Card, CardContent } from "../ui/card";
-import { getCurrencySymbol } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { Envelope } from "@/lib/types";
 import EditDeleteDropdown from "./edit-delete-dropdown";
-import AddEditEnvelopeDrawer from "./add-edit-envelope-drawer";
 import { useState } from "react";
 import { DeleteDialog } from "./delete-dialog";
 import { useDeleteEnvelope } from "@/services/useEnvelope";
+import AddEditEnvelopeDrawer from "./add-edit-envelope-drawer";
 
 interface EnvelopeCardProps {
   envelope: Envelope;
@@ -35,9 +35,7 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
 
   // User currency info
   const { session } = useSession();
-  const currency = getCurrencySymbol(
-    session?.user?.user_metadata?.currency || "INR",
-  );
+  const currency = session?.user?.user_metadata?.currency || "INR";
 
   const { mutate, isPending } = useDeleteEnvelope(() =>
     handleDeleteOpen(false),
@@ -50,11 +48,11 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
       >
         <CardContent className="py-0 ">
           <p className={`${amountClass} font-semibold text-2xl`}>
-            {currency} {Math.abs(amount)}{" "}
+            {formatCurrency(currency, amount)}{" "}
             <span className="text-neutral-700">{amountText}</span>
           </p>
           <p className="text-neutral-700">
-            {currency} {envelope.allocated_amount} allocated
+            {formatCurrency(currency, envelope.allocated_amount)} allocated
           </p>
         </CardContent>
       </Card>
