@@ -1,5 +1,4 @@
 import AddEditEnvelopeDrawer from "@/components/custom/add-edit-envelope-drawer";
-import AddCardDrawer from "@/components/custom/add-edit-envelope-drawer";
 import EnvelopeCard from "@/components/custom/envelope-card";
 import ErrorMessage from "@/components/custom/error-message";
 import LoaderCard from "@/components/custom/loader-card";
@@ -25,12 +24,12 @@ function Envelope() {
         expenses
       </p>
       <div className="grid grid-cols-12 gap-6 lg:gap-12 w-full mt-8">
-        <div className="lg:col-span-4 col-span-6">
+        <div className="xl:col-span-4 md:col-span-6 col-span-12">
           <AddEditEnvelopeDrawer handleOpen={handleOpen} open={open} />
         </div>
         {isFetching &&
           [1, 2, 3].map((_) => (
-            <div className="lg:col-span-4 col-span-6">
+            <div className="xl:col-span-4 md:col-span-6 col-span-12">
               <LoaderCard />
             </div>
           ))}
@@ -43,7 +42,7 @@ function Envelope() {
           </div>
         )}
         {data?.map((envelope) => (
-          <div className="lg:col-span-4 col-span-6">
+          <div className="xl:col-span-4 md:col-span-6 col-span-12">
             <EnvelopeCard envelope={envelope} />
           </div>
         ))}

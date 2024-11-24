@@ -5,30 +5,43 @@ import { Envelope } from "@/lib/types";
 import EditDeleteDropdown from "./edit-delete-dropdown";
 import AddEditEnvelopeDrawer from "./add-edit-envelope-drawer";
 import { useState } from "react";
+import { DeleteDialog } from "./delete-dialog";
+import { useDeleteEnvelope } from "@/services/useEnvelope";
 
 interface EnvelopeCardProps {
   envelope: Envelope;
 }
 
 export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
+  // Edit delete drawer states
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleEditOpen = (open: boolean) => {
+    setOpen(open);
+  };
+  const handleDeleteOpen = (open: boolean) => {
+    setDeleteOpen(open);
+  };
+
+  // Text and style rendering computation
   const amountClass =
     envelope.allocated_amount > envelope.monthlySpend
       ? "text-green-600"
       : "text-red-600";
   const amount = envelope.allocated_amount - envelope.monthlySpend;
   const amountText = amount > 0 ? "remaining" : "exceeded";
+  const borderColor = amount > 0 ? "border-l-blue-500" : "border-l-red-600";
 
+  // User currency info
   const { session } = useSession();
   const currency = getCurrencySymbol(
     session?.user?.user_metadata?.currency || "INR",
   );
 
-  const borderColor = amount > 0 ? "border-l-blue-500" : "border-l-red-600";
-
-  const handleEditOpen = (open: boolean) => {
-    setOpen(open);
-  };
+  const { mutate, isPending } = useDeleteEnvelope(() =>
+    handleDeleteOpen(false),
+  );
 
   return (
     <div>
@@ -49,7 +62,10 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
         <h3 className="text-left text-lg font-semibold mt-2">
           {envelope.name}
         </h3>
-        <EditDeleteDropdown handleEditOpen={handleEditOpen} />
+        <EditDeleteDropdown
+          handleEditOpen={handleEditOpen}
+          handleDeleteOpen={handleDeleteOpen}
+        />
         <AddEditEnvelopeDrawer
           envelope={envelope}
           isEdit
@@ -57,6 +73,13 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
           handleOpen={() => {
             setOpen((prevState) => !prevState);
           }}
+        />
+        <DeleteDialog
+          keyText="envelope"
+          handleClose={handleDeleteOpen}
+          onDelete={() => mutate(envelope.id)}
+          open={deleteOpen}
+          isPending={isPending}
         />
       </div>
     </div>

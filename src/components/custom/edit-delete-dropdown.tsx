@@ -7,9 +7,13 @@ import {
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 interface EditDeleteDropdownProps {
   handleEditOpen: (open: boolean) => void;
+  handleDeleteOpen: (open: boolean) => void;
 }
 
-function EditDeleteDropdown({ handleEditOpen }: EditDeleteDropdownProps) {
+function EditDeleteDropdown({
+  handleEditOpen,
+  handleDeleteOpen,
+}: EditDeleteDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -22,7 +26,10 @@ function EditDeleteDropdown({ handleEditOpen }: EditDeleteDropdownProps) {
         >
           <Edit2 size={20} /> <span>Edit</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex gap-2 mt-2 items-center text-red-600  hover:outline-none cursor-pointer">
+        <DropdownMenuItem
+          onClick={() => handleDeleteOpen(true)}
+          className="flex gap-2 mt-2 items-center text-red-600  hover:outline-none cursor-pointer"
+        >
           <Trash2 size={20} /> <span>Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -53,22 +53,22 @@ function AddEditEnvelopeDrawer({
     },
   });
 
-  const closeModal = () => {
+  const handleChange = () => {
     form.reset({
       name: envelope?.name || "",
       allocated_amount: envelope?.allocated_amount || 0,
     });
-    handleOpen(false);
+    handleOpen(!open);
   };
 
   const { isPending, mutate } = useAddOrEditEnvelope(
     form.getValues(),
-    closeModal,
+    handleChange,
   );
   const { isPending: isEditPending, mutate: editMutate } = useEditEnvelope(
     envelope!,
     form.getValues(),
-    closeModal,
+    handleChange,
   );
 
   const handleSubmit = async () => {
@@ -86,7 +86,7 @@ function AddEditEnvelopeDrawer({
   const pending = isEditPending || isPending;
 
   return (
-    <Drawer open={open} onOpenChange={closeModal} direction="right">
+    <Drawer open={open} onOpenChange={handleChange} direction="right">
       {!isEdit && (
         <DrawerTrigger className="w-full">
           <AddCard label="New envelope" />
