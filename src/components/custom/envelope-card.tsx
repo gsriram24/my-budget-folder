@@ -1,6 +1,5 @@
-import { useSession } from "@/context/SessionContext";
 import { Card, CardContent } from "../ui/card";
-import { formatCurrency } from "@/lib/utils";
+import { useCurrencyHelper } from "@/lib/utils";
 import { Envelope } from "@/lib/types";
 import EditDeleteDropdown from "./edit-delete-dropdown";
 import { useState } from "react";
@@ -34,8 +33,7 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
   const borderColor = amount > 0 ? "border-l-blue-500" : "border-l-red-600";
 
   // User currency info
-  const { session } = useSession();
-  const currency = session?.user?.user_metadata?.currency || "INR";
+  const { format } = useCurrencyHelper();
 
   const { mutate, isPending } = useDeleteEnvelope(() =>
     handleDeleteOpen(false),
@@ -48,11 +46,11 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
       >
         <CardContent className="py-0 ">
           <p className={`${amountClass} font-semibold text-2xl`}>
-            {formatCurrency(currency, amount)}{" "}
+            {format(amount)}{" "}
             <span className="text-neutral-700">{amountText}</span>
           </p>
           <p className="text-neutral-700">
-            {formatCurrency(currency, envelope.allocated_amount)} allocated
+            {format(envelope.allocated_amount)} allocated
           </p>
         </CardContent>
       </Card>

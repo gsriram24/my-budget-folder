@@ -1,9 +1,10 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import ExpensesTable from "@/components/custom/expenses-table";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute('/_auth-layout/expenses')({
+export const Route = createLazyFileRoute("/_auth-layout/expenses")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return 'Hello /_auth-layout/expenses!'
+  return <ExpensesTable />;
 }

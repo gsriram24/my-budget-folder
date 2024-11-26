@@ -1,6 +1,5 @@
-import { useSession } from "@/context/SessionContext";
 import { Card, CardContent } from "../ui/card";
-import { formatCurrency } from "@/lib/utils";
+import { useCurrencyHelper } from "@/lib/utils";
 import { Income } from "@/lib/types";
 import EditDeleteDropdown from "./edit-delete-dropdown";
 import { useState } from "react";
@@ -25,8 +24,8 @@ export default function IncomeCard({ income }: IncomeCardProps) {
   };
 
   // User currency info
-  const { session } = useSession();
-  const currency = session?.user?.user_metadata?.currency || "INR";
+
+  const { format } = useCurrencyHelper();
 
   const { mutate, isPending } = useDeleteIncome(() => handleDeleteOpen(false));
 
@@ -35,7 +34,7 @@ export default function IncomeCard({ income }: IncomeCardProps) {
       <Card className="w-full min-h-56 flex items-center justify-start border-l-8 border-l-blue-500">
         <CardContent className="py-0 ">
           <p className="text-neutral-700 font-semibold text-3xl">
-            {formatCurrency(currency, income.amount)}
+            {format(income.amount)}
           </p>
           <p className="text-neutral-700 text-regular">
             {income.recurring ? "Recurring" : "One-time"}

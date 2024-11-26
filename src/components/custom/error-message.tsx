@@ -10,7 +10,7 @@ export default function ErrorMessage({
   message,
 }: ErrorMessageProps): JSX.Element {
   return (
-    <Alert className="mt-6" variant="destructive">
+    <Alert className="mt-6 text-left" variant="destructive">
       <AlertCircle className="h-5 w-5" />
       <AlertTitle>{title || "Error"}</AlertTitle>
       <AlertDescription>

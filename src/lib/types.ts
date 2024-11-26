@@ -10,3 +10,11 @@ export interface Income {
   amount: number;
   recurring: boolean;
 }
+export interface Expense {
+  id: string;
+  title: string;
+  amount: number;
+  envelope: string;
+  envelopeName: string;
+  date: string;
+}
