@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import EditDeleteDropdown from "@/components/custom/edit-delete-dropdown";
 import {
   TableBody,
@@ -16,13 +16,39 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { formatDate, useCurrencyHelper } from "@/lib/utils";
-import { useFetchExpense } from "@/services/useExpense";
+import { useDeleteExpense, useFetchExpense } from "@/services/useExpense";
 import { PaginationWithLinks } from "../pagination-with-links";
 import { useSearch } from "@tanstack/react-router";
 import { Skeleton } from "../../ui/skeleton";
 import ErrorMessage from "../error-message";
+import AddEditExpenseDrawer from "./add-expense-drawer";
+import { DeleteDialog } from "../delete-dialog";
 
 function ExpensesTable() {
+  // Edit expense states
+  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [open, setOpen] = useState(false);
+  const handleOpen = (open: boolean) => {
+    setOpen(open);
+  };
+  const handleEdit = (expense: Expense) => {
+    setSelectedExpense(expense);
+    handleOpen(true);
+  };
+
+  // Delete expense states
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const handleDeleteOpen = (open: boolean) => {
+    setDeleteOpen(open);
+  };
+  const handleDelete = (expense: Expense) => {
+    setSelectedExpense(expense);
+    handleDeleteOpen(true);
+  };
+  const { mutate, isPending } = useDeleteExpense(() => handleDeleteOpen(false));
+
+  // Get all page state from the URL
   const { pageSize: pageSizeQuery, page: pageFromQuery } = useSearch({
     strict: false,
   }) as any;
@@ -30,6 +56,7 @@ function ExpensesTable() {
   const pageSize = pageSizeQuery || 5;
   const page = pageFromQuery || 1;
 
+  // Fetch expenses data
   const { data, error, isLoading } = useFetchExpense(page - 1, pageSize);
   const { data: expenses, count } = useMemo(
     () => data || { data: [], count: 0 },
@@ -63,11 +90,15 @@ function ExpensesTable() {
       },
       {
         id: "actions",
-        cell: () => (
-          <EditDeleteDropdown
-            handleDeleteOpen={() => {}}
-            handleEditOpen={() => {}}
-          />
+        cell: ({ row }) => (
+          <div className="flex justify-end max-w-32">
+            <EditDeleteDropdown
+              handleDeleteOpen={() => handleDelete(row.original)}
+              handleEditOpen={() => {
+                handleEdit(row.original);
+              }}
+            />
+          </div>
         ),
         size: 60,
       },
@@ -147,6 +178,19 @@ function ExpensesTable() {
           pageSizeOptions={[1, 5, 10, 20, 30, 50]}
         />
       </div>
+      <AddEditExpenseDrawer
+        open={open}
+        handleOpen={handleOpen}
+        expense={selectedExpense!}
+        isEdit
+      />
+      <DeleteDialog
+        keyText="expense"
+        handleClose={handleDeleteOpen}
+        onDelete={() => mutate(selectedExpense?.id!)}
+        open={deleteOpen}
+        isPending={isPending}
+      />
     </>
   );
 }

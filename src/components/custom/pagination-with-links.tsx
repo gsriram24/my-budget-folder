@@ -185,7 +185,7 @@ function SelectRowsPerPage({
         value={String(pageSize)}
         onValueChange={(value) => setPageSize(Number(value))}
       >
-        <SelectTrigger className="max-w-fit">
+        <SelectTrigger className="max-w-fit gap-2">
           <SelectValue placeholder="Select page size">
             {String(pageSize)}
           </SelectValue>

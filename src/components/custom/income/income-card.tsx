@@ -1,9 +1,9 @@
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useCurrencyHelper } from "@/lib/utils";
 import { Income } from "@/lib/types";
-import EditDeleteDropdown from "./edit-delete-dropdown";
+import EditDeleteDropdown from "@/components/custom/edit-delete-dropdown";
 import { useState } from "react";
-import { DeleteDialog } from "./delete-dialog";
+import { DeleteDialog } from "@/components/custom/delete-dialog";
 import AddEditIncomeDrawer from "./add-edit-income-drawer";
 import { useDeleteIncome } from "@/services/useIncome";
 

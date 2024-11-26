@@ -18,17 +18,17 @@ export interface AddExpense {
 }
 
 const invalidateQuery = (queryClient: QueryClient) => {
-  queryClient.invalidateQueries({ queryKey: ["expense"] });
+  queryClient.invalidateQueries({ queryKey: ["expenses"] });
 };
 
 const addExpense = async (expense: AddExpense) => {
-  const { error } = await supabase.from("expense").upsert(expense).single();
+  const { error } = await supabase.from("expense").insert(expense).single();
   if (error) {
     throw error;
   }
 };
 
-export function useAddIncome(expense: AddExpense, handleClose: () => void) {
+export function useAddExpense(expense: AddExpense, handleClose: () => void) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
@@ -61,7 +61,7 @@ export const fetchExpenses = async (page: number, offset: number) => {
         count: "exact",
       },
     )
-    .order("created_at")
+    .order("date", { ascending: false })
     .range(page, page + offset - 1);
 
   if (error) {
@@ -80,7 +80,7 @@ export function useFetchExpense(page: number, offset: number) {
   return useQuery(fetchExpenseQueryOptions);
 }
 
-const editIncome = async (expense: AddExpense, exisitngExpense: Expense) => {
+const editExpense = async (expense: AddExpense, exisitngExpense: Expense) => {
   const { error } = await supabase
     .from("expense")
     .upsert({ ...expense, id: exisitngExpense.id })
@@ -89,7 +89,7 @@ const editIncome = async (expense: AddExpense, exisitngExpense: Expense) => {
     throw error;
   }
 };
-export function useEditIncome(
+export function useEditExpense(
   exisitngExpense: Expense,
   expense: AddExpense,
   handleClose: () => void,
@@ -97,7 +97,7 @@ export function useEditIncome(
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => editIncome(expense, exisitngExpense),
+    mutationFn: () => editExpense(expense, exisitngExpense),
     onError: (error) => {
       toast({
         title: "Error",
@@ -108,7 +108,7 @@ export function useEditIncome(
     onSuccess: () => {
       toast({
         title: "Success",
-        description: `Income ${expense.title} updated!`,
+        description: `Expense ${expense.title} updated!`,
         variant: "success",
       });
       handleClose();
@@ -117,17 +117,17 @@ export function useEditIncome(
   });
 }
 
-export const deleteIncome = async (id: string) => {
+export const deleteExpense = async (id: string) => {
   const { error } = await supabase.from("expense").delete().eq("id", id);
   if (error) {
     throw error;
   }
 };
-export function useDeleteIncome(handleClose: () => void) {
+export function useDeleteExpense(handleClose: () => void) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => deleteIncome(id),
+    mutationFn: (id: string) => deleteExpense(id),
     onError: (error) => {
       toast({
         title: "Error",
