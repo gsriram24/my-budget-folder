@@ -187,7 +187,7 @@ function ExpensesTable() {
           pageSize={pageSize}
           page={page}
           totalCount={count!}
-          pageSizeOptions={[1, 5, 10, 20, 30, 50]}
+          pageSizeOptions={[5, 10, 20, 30, 50]}
         />
       </div>
       <AddEditExpenseDrawer
