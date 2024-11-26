@@ -1,5 +1,5 @@
-import AddEditEnvelopeDrawer from "@/components/custom/add-edit-income-drawer";
-import EnvelopeCard from "@/components/custom/envelope-card";
+import AddEditEnvelopeDrawer from "@/components/custom/envelope/add-edit-envelope-drawer";
+import EnvelopeCard from "@/components/custom/envelope/envelope-card";
 import ErrorMessage from "@/components/custom/error-message";
 import LoaderCard from "@/components/custom/loader-card";
 import { useFetchEnvelopes } from "@/services/useEnvelope";

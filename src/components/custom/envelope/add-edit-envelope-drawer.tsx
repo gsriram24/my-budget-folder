@@ -8,8 +8,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import AddCard from "./add-card";
-import { Button } from "../ui/button";
+import AddCard from "../add-card";
+import { Button } from "../../ui/button";
 import { z } from "zod";
 import {
   Form,
@@ -18,10 +18,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { useAddOrEditEnvelope, useEditEnvelope } from "@/services/useEnvelope";
 import { Envelope } from "@/lib/types";
 

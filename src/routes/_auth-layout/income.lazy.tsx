@@ -1,6 +1,6 @@
-import AddEditIncomeDrawer from "@/components/custom/add-edit-income-drawer";
+import AddEditIncomeDrawer from "@/components/custom/income/add-edit-income-drawer";
 import ErrorMessage from "@/components/custom/error-message";
-import IncomeCard from "@/components/custom/income-card";
+import IncomeCard from "@/components/custom/income/income-card";
 import LoaderCard from "@/components/custom/loader-card";
 import { useFetchIncome } from "@/services/useIncome";
 import { createLazyFileRoute } from "@tanstack/react-router";

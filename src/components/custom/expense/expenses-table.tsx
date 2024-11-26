@@ -17,10 +17,10 @@ import {
 } from "@tanstack/react-table";
 import { formatDate, useCurrencyHelper } from "@/lib/utils";
 import { useFetchExpense } from "@/services/useExpense";
-import { PaginationWithLinks } from "./pagination-with-links";
+import { PaginationWithLinks } from "../pagination-with-links";
 import { useSearch } from "@tanstack/react-router";
-import { Skeleton } from "../ui/skeleton";
-import ErrorMessage from "./error-message";
+import { Skeleton } from "../../ui/skeleton";
+import ErrorMessage from "../error-message";
 
 function ExpensesTable() {
   const { pageSize: pageSizeQuery, page: pageFromQuery } = useSearch({
@@ -43,16 +43,19 @@ function ExpensesTable() {
       {
         accessorKey: "title",
         header: "Expense",
+        minWidth: 200,
       },
-      {
-        accessorKey: "envelopeName",
-        header: "Envelope",
-      },
+
       {
         accessorKey: "amount",
         header: "Amount Spent",
         cell: ({ row }) => format(row.original.amount),
       },
+      {
+        accessorKey: "envelopeName",
+        header: "Envelope",
+      },
+
       {
         accessorKey: "date",
         header: "Date",
@@ -66,6 +69,7 @@ function ExpensesTable() {
             handleEditOpen={() => {}}
           />
         ),
+        size: 60,
       },
     ],
     [],
@@ -82,13 +86,18 @@ function ExpensesTable() {
 
   return (
     <>
-      <Table className="mb-4">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    style={{
+                      minWidth: header.getSize() ? header.getSize() : 0,
+                    }}
+                    key={header.id}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -130,12 +139,14 @@ function ExpensesTable() {
           )}
         </TableBody>
       </Table>
-      <PaginationWithLinks
-        pageSize={pageSize}
-        page={page}
-        totalCount={count!}
-        pageSizeOptions={[1, 5, 10, 20, 30, 50]}
-      />
+      <div className="mt-4">
+        <PaginationWithLinks
+          pageSize={pageSize}
+          page={page}
+          totalCount={count!}
+          pageSizeOptions={[1, 5, 10, 20, 30, 50]}
+        />
+      </div>
     </>
   );
 }

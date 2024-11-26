@@ -8,8 +8,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import AddCard from "./add-card";
-import { Button } from "../ui/button";
+import AddCard from "@/components/custom/add-card";
+import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import {
   Form,
@@ -19,19 +19,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { Income } from "@/lib/types";
 import { useAddIncome, useEditIncome } from "@/services/useIncome";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
 
 const formSchema = z.object({

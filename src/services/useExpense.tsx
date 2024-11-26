@@ -1,6 +1,5 @@
 import { useToast } from "@/hooks/use-toast";
-import { Income } from "@/lib/types";
-import { getOneMonthAgo } from "@/lib/utils";
+import { Expense } from "@/lib/types";
 import supabase from "@/supabaseClient";
 import {
   keepPreviousData,
@@ -11,28 +10,29 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-export interface AddIncome {
-  name: string;
+export interface AddExpense {
+  title: string;
   amount: number;
-  recurring: boolean;
+  envelope: string;
+  date: Date;
 }
 
 const invalidateQuery = (queryClient: QueryClient) => {
-  queryClient.invalidateQueries({ queryKey: ["income"] });
+  queryClient.invalidateQueries({ queryKey: ["expense"] });
 };
 
-const addIncome = async (income: AddIncome) => {
-  const { error } = await supabase.from("income").upsert(income).single();
+const addExpense = async (expense: AddExpense) => {
+  const { error } = await supabase.from("expense").upsert(expense).single();
   if (error) {
     throw error;
   }
 };
 
-export function useAddIncome(income: AddIncome, handleClose: () => void) {
+export function useAddIncome(expense: AddExpense, handleClose: () => void) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => addIncome(income),
+    mutationFn: () => addExpense(expense),
     onError: (error) => {
       toast({
         title: "Error",
@@ -43,7 +43,7 @@ export function useAddIncome(income: AddIncome, handleClose: () => void) {
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Income source added!",
+        description: "Epxense added!",
         variant: "success",
       });
       handleClose();
@@ -80,70 +80,24 @@ export function useFetchExpense(page: number, offset: number) {
   return useQuery(fetchExpenseQueryOptions);
 }
 
-const editIncome = async (income: AddIncome, existingIncome: Income) => {
-  const { data: incomeHistory, error: historyError } = await supabase
-    .from("income_history")
-    .select("created_at, amount")
-    .eq("parent_id", existingIncome.id)
-    .order("created_at", { ascending: false })
-    .limit(1);
-
-  if (historyError) {
-    throw historyError;
-  }
-  const incomeHistoryData = incomeHistory[0];
-  if (!incomeHistoryData) {
-    const { error: insertError } = await supabase
-      .from("income_history")
-      .insert({
-        ...existingIncome,
-        parent_id: existingIncome.id,
-        id: undefined,
-        monthlySpend: undefined,
-      });
-
-    if (insertError) {
-      throw insertError;
-    }
-  } else {
-    const lastCreatedAt = new Date(incomeHistoryData.created_at);
-
-    if (
-      lastCreatedAt < getOneMonthAgo() &&
-      incomeHistoryData.amount !== income.amount
-    ) {
-      const { error: insertError } = await supabase
-        .from("income_history")
-        .insert({
-          ...existingIncome,
-          parent_id: existingIncome.id,
-          id: undefined,
-          monthlySpend: undefined,
-        });
-
-      if (insertError) {
-        throw insertError;
-      }
-    }
-  }
-
+const editIncome = async (expense: AddExpense, exisitngExpense: Expense) => {
   const { error } = await supabase
-    .from("income")
-    .upsert({ ...income, id: existingIncome.id })
+    .from("expense")
+    .upsert({ ...expense, id: exisitngExpense.id })
     .single();
   if (error) {
     throw error;
   }
 };
 export function useEditIncome(
-  existingIncome: Income,
-  income: AddIncome,
+  exisitngExpense: Expense,
+  expense: AddExpense,
   handleClose: () => void,
 ) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => editIncome(income, existingIncome),
+    mutationFn: () => editIncome(expense, exisitngExpense),
     onError: (error) => {
       toast({
         title: "Error",
@@ -154,7 +108,7 @@ export function useEditIncome(
     onSuccess: () => {
       toast({
         title: "Success",
-        description: `Income ${income.name} updated!`,
+        description: `Income ${expense.title} updated!`,
         variant: "success",
       });
       handleClose();
@@ -164,7 +118,7 @@ export function useEditIncome(
 }
 
 export const deleteIncome = async (id: string) => {
-  const { error } = await supabase.from("income").delete().eq("id", id);
+  const { error } = await supabase.from("expense").delete().eq("id", id);
   if (error) {
     throw error;
   }
@@ -184,7 +138,7 @@ export function useDeleteIncome(handleClose: () => void) {
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Income deleted!",
+        description: "Expense deleted!",
         variant: "success",
       });
       handleClose();

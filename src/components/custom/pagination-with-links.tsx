@@ -124,7 +124,7 @@ export function PaginationWithLinks({
   }, [page, totalPageCount]);
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-3 w-full">
+    <div className="flex flex-col md:flex-row md:items-center gap-6 md:w-full">
       <div className="flex flex-col gap-4 flex-1">
         <SelectRowsPerPage
           options={pageSizeOptions}
@@ -133,7 +133,9 @@ export function PaginationWithLinks({
         />
       </div>
 
-      <Pagination className={cn({ "md:justify-end": pageSizeOptions })}>
+      <Pagination
+        className={cn({ "justify-start md:justify-end": pageSizeOptions })}
+      >
         <PaginationContent className="max-sm:gap-0">
           <PaginationItem>
             <PaginationPrevious
@@ -176,14 +178,14 @@ function SelectRowsPerPage({
   pageSize: number;
 }) {
   return (
-    <div className="flex items-center gap-4">
-      <span className="whitespace-nowrap text-sm">Rows per page</span>
+    <div className="flex items-center gap-2">
+      <span className="whitespace-nowrap text-sm">Show</span>
 
       <Select
         value={String(pageSize)}
         onValueChange={(value) => setPageSize(Number(value))}
       >
-        <SelectTrigger>
+        <SelectTrigger className="max-w-fit">
           <SelectValue placeholder="Select page size">
             {String(pageSize)}
           </SelectValue>
@@ -196,6 +198,7 @@ function SelectRowsPerPage({
           ))}
         </SelectContent>
       </Select>
+      <span className="whitespace-nowrap text-sm">entries</span>
     </div>
   );
 }
