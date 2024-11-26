@@ -59,7 +59,7 @@ function ExpensesTable() {
     strict: false,
   }) as any;
 
-  const pageSize = pageSizeQuery || 5;
+  const pageSize = pageSizeQuery || 10;
   const page = pageFromQuery || 1;
 
   // Fetch expenses data

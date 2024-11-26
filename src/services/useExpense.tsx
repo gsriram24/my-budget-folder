@@ -110,7 +110,7 @@ export const fetchExpenses = async (
 export function useFetchExpense(
   page: number,
   offset: number,
-  filter: string = "week",
+  filter: string = "month",
   sortValue: string = "date",
   sortOrder: string = "desc",
 ) {

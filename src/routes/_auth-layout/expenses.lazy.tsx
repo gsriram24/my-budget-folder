@@ -5,6 +5,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { createLazyFileRoute } from "@tanstack/react-router";
@@ -17,7 +18,7 @@ export const Route = createLazyFileRoute("/_auth-layout/expenses")({
 
 const filterKeysAndValues = [
   { key: "week", value: "Last Week" },
-  { key: "month", value: "Last Month" },
+  { key: "month", value: "This Month" },
   { key: "3-month", value: "Last 3 months" },
   { key: "6-month", value: "Last 6 months" },
   { key: "year", value: "Last year" },
@@ -67,10 +68,15 @@ function RouteComponent() {
       </p>
       <div className="flex gap-2 justify-between mt-6 mb-4">
         <div className="flex gap-4">
-          <Select value={filter} onValueChange={handleFilter}>
-            <SelectTrigger unstyled>
-              <div className="flex gap-1 items-center" role="button">
-                <FilterIcon size={16} /> Filter
+          <Select
+            defaultValue="month"
+            value={filter}
+            onValueChange={handleFilter}
+          >
+            <SelectTrigger>
+              <div className="flex gap-3 items-center w-32" role="button">
+                <FilterIcon size={16} />
+                <SelectValue placeholder="Filter"></SelectValue>
               </div>
             </SelectTrigger>
             <SelectContent>
@@ -82,12 +88,13 @@ function RouteComponent() {
             </SelectContent>
           </Select>
           <Select
-            value={`${sortValue}-${sortOrder}`}
+            value={`${sortValue ?? "date"}-${sortOrder ?? "desc"}`}
             onValueChange={handleSort}
           >
-            <SelectTrigger unstyled>
-              <div className="flex gap-1 items-center" role="button">
-                <ArrowUpDownIcon size={16} /> Sort
+            <SelectTrigger>
+              <div className="flex gap-3 items-center w-32">
+                <ArrowUpDownIcon size={16} />{" "}
+                <SelectValue placeholder="Sort"></SelectValue>
               </div>
             </SelectTrigger>
             <SelectContent>
