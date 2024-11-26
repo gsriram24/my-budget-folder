@@ -49,7 +49,13 @@ function ExpensesTable() {
   const { mutate, isPending } = useDeleteExpense(() => handleDeleteOpen(false));
 
   // Get all page state from the URL
-  const { pageSize: pageSizeQuery, page: pageFromQuery } = useSearch({
+  const {
+    pageSize: pageSizeQuery,
+    page: pageFromQuery,
+    filter,
+    sortValue,
+    sortOrder,
+  } = useSearch({
     strict: false,
   }) as any;
 
@@ -57,7 +63,13 @@ function ExpensesTable() {
   const page = pageFromQuery || 1;
 
   // Fetch expenses data
-  const { data, error, isLoading } = useFetchExpense(page - 1, pageSize);
+  const { data, error, isLoading } = useFetchExpense(
+    page - 1,
+    pageSize,
+    filter,
+    sortValue,
+    sortOrder,
+  );
   const { data: expenses, count } = useMemo(
     () => data || { data: [], count: 0 },
     [data],

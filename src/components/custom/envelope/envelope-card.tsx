@@ -46,7 +46,7 @@ export default function EnvelopeCard({ envelope }: EnvelopeCardProps) {
       >
         <CardContent className="py-0 ">
           <p className={`${amountClass} font-semibold text-2xl`}>
-            {format(amount)}{" "}
+            {format(Math.abs(amount))}{" "}
             <span className="text-neutral-700">{amountText}</span>
           </p>
           <p className="text-neutral-700">

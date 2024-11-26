@@ -19,6 +19,7 @@ export interface AddExpense {
 
 const invalidateQuery = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: ["expenses"] });
+  queryClient.invalidateQueries({ queryKey: ["envelopes"] });
 };
 
 const addExpense = async (expense: AddExpense) => {
@@ -52,7 +53,42 @@ export function useAddExpense(expense: AddExpense, handleClose: () => void) {
   });
 }
 
-export const fetchExpenses = async (page: number, offset: number) => {
+export const fetchExpenses = async (
+  page: number,
+  offset: number,
+  filter: string,
+  sortValue: string,
+  sortOrder: string,
+) => {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+
+  switch (filter) {
+    case "week":
+      date.setDate(date.getDate() - 7);
+      break;
+    case "month":
+      date.setMonth(date.getMonth() - 1);
+      break;
+    case "3-month":
+      date.setMonth(date.getMonth() - 3);
+      break;
+    case "6-month":
+      date.setMonth(date.getMonth() - 6);
+      break;
+    case "year":
+      date.setFullYear(date.getFullYear() - 1);
+      break;
+    case "all":
+      date.setFullYear(date.getFullYear() - 100);
+      break;
+    default:
+      break;
+  }
+
+  const from = page * offset;
+  const to = from + offset;
+
   const { data, error, count } = await supabase
     .from("expense")
     .select(
@@ -61,8 +97,9 @@ export const fetchExpenses = async (page: number, offset: number) => {
         count: "exact",
       },
     )
-    .order("date", { ascending: false })
-    .range(page, page + offset - 1);
+    .gte("date", date.toISOString())
+    .order(sortValue, { ascending: sortOrder === "asc" })
+    .range(from, to - 1);
 
   if (error) {
     throw error;
@@ -70,10 +107,16 @@ export const fetchExpenses = async (page: number, offset: number) => {
   return { data, count };
 };
 
-export function useFetchExpense(page: number, offset: number) {
+export function useFetchExpense(
+  page: number,
+  offset: number,
+  filter: string = "week",
+  sortValue: string = "date",
+  sortOrder: string = "desc",
+) {
   const fetchExpenseQueryOptions = queryOptions({
-    queryKey: ["expenses", page, offset],
-    queryFn: () => fetchExpenses(page, offset),
+    queryKey: ["expenses", page, offset, filter, sortValue, sortOrder],
+    queryFn: () => fetchExpenses(page, offset, filter, sortValue, sortOrder),
     staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
   });
