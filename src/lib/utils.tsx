@@ -1,7 +1,7 @@
 import { useSession } from "@/context/SessionContext";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { format } from "date-fns";
+import { format } from "date-fns-tz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,9 +16,9 @@ export function formatCurrency(currency: string, amount: number) {
 }
 
 export function getOneMonthAgo() {
-  const oneMonthAgo = new Date();
-  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  return oneMonthAgo;
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  return startOfMonth;
 }
 
 export function useCurrencyHelper() {
@@ -30,5 +30,5 @@ export function useCurrencyHelper() {
 }
 
 export function formatDate(date: Date | string) {
-  return format(date, "do MMM yyyy");
+  return format(date, "do MMM yyyy", { timeZone: "UTC" });
 }

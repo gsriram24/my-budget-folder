@@ -166,6 +166,15 @@ function ExpensesTable() {
                 <ErrorMessage message={error.message} />
               </TableCell>
             </TableRow>
+          ) : expenses.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="md:text-center text-left"
+              >
+                No expenses found for this period.
+              </TableCell>
+            </TableRow>
           ) : (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -183,12 +192,14 @@ function ExpensesTable() {
         </TableBody>
       </Table>
       <div className="mt-4">
-        <PaginationWithLinks
-          pageSize={pageSize}
-          page={page}
-          totalCount={count!}
-          pageSizeOptions={[5, 10, 20, 30, 50]}
-        />
+        {count! > 0 && (
+          <PaginationWithLinks
+            pageSize={pageSize}
+            page={page}
+            totalCount={count!}
+            pageSizeOptions={[5, 10, 20, 30, 50]}
+          />
+        )}
       </div>
       <AddEditExpenseDrawer
         open={open}

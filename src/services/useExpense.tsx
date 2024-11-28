@@ -23,7 +23,11 @@ const invalidateQuery = (queryClient: QueryClient) => {
 };
 
 const addExpense = async (expense: AddExpense) => {
-  const { error } = await supabase.from("expense").insert(expense).single();
+  const date = expense.date.toLocaleDateString();
+  const { error } = await supabase
+    .from("expense")
+    .insert({ ...expense, date })
+    .single();
   if (error) {
     throw error;
   }
@@ -68,7 +72,7 @@ export const fetchExpenses = async (
       date.setDate(date.getDate() - 7);
       break;
     case "month":
-      date.setMonth(date.getMonth() - 1);
+      date.setDate(1);
       break;
     case "3-month":
       date.setMonth(date.getMonth() - 3);
@@ -97,7 +101,7 @@ export const fetchExpenses = async (
         count: "exact",
       },
     )
-    .gte("date", date.toISOString())
+    .gte("date", date.toLocaleString())
     .order(sortValue, { ascending: sortOrder === "asc" })
     .range(from, to - 1);
 

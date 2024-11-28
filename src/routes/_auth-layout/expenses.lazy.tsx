@@ -66,7 +66,7 @@ function RouteComponent() {
         Had a recent expenditure? Spent something? Manage all your expenses
         here!
       </p>
-      <div className="flex gap-2 justify-between mt-6 mb-4">
+      <div className="flex md:flex-row flex-col-reverse items-start gap-y-4  gap-2 justify-between mt-6 mb-4">
         <div className="flex gap-4">
           <Select
             defaultValue="month"
