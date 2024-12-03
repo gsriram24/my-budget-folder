@@ -56,7 +56,7 @@ export function EnvelopeSpendingCard({
     <Card className="flex flex-col h-full">
       <CardHeader className="items-center pb-0">
         <CardTitle className="text-center">
-          Monthly Spends - By Envelope
+          Monthly Spending Breakdown
         </CardTitle>
         <CardDescription>
           {new Date().toLocaleString("default", {

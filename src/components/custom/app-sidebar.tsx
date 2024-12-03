@@ -11,7 +11,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import { Calculator, DollarSign, Home, Mail } from "lucide-react";
+import { Calculator, DollarSign, Home, Mail, MailIcon } from "lucide-react";
 import NavUser from "./nav-user";
 const items = [
   {
@@ -36,11 +36,22 @@ const items = [
   },
 ];
 export function AppSidebar() {
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, open } = useSidebar();
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader />
+      <SidebarHeader className="px-3 my-2">
+        <div className="flex gap-2 items-center">
+          <div className="w-6 h-6">
+            <MailIcon className="size-6 mr-8" />
+          </div>
+          {open && (
+            <div className="font-bold tracking-tighter text-lg overflow-hidden text-nowrap">
+              Budget Folder
+            </div>
+          )}
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="p-0">
           <SidebarGroupContent>

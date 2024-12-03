@@ -3,7 +3,7 @@ export const pieChartColors = [
   "#F59E0B", // Amber-500
   "#10B981", // Green-500
   "#EF4444", // Red-500
-  "#9333EA", // Purple-500
+  "#c084fc", // Purple-400
   "#D97706", // Orange-600
   "#EC4899", // Pink-500
   "#6B7280", // Gray-600

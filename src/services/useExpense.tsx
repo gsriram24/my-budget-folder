@@ -74,6 +74,10 @@ export const fetchExpenses = async (
     case "month":
       date.setDate(1);
       break;
+    case "2-month":
+      date.setDate(1);
+      date.setMonth(date.getMonth() - 2);
+      break;
     case "3-month":
       date.setMonth(date.getMonth() - 3);
       break;

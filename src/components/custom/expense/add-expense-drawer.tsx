@@ -111,7 +111,7 @@ function AddEditExpenseDrawer({
   return (
     <Drawer open={open} onOpenChange={handleChange} direction="right">
       {!isEdit && (
-        <DrawerTrigger>
+        <DrawerTrigger asChild>
           <Button>
             <PlusIcon size={24} strokeWidth={4} /> Add expense
           </Button>
@@ -216,7 +216,7 @@ function AddEditExpenseDrawer({
           </form>
         </Form>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button disabled={pending} variant="outline">
               Cancel
             </Button>

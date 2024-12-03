@@ -28,8 +28,11 @@ function Envelope() {
           <AddEditEnvelopeDrawer handleOpen={handleOpen} open={open} />
         </div>
         {isFetching &&
-          [1, 2, 3].map((_) => (
-            <div className="xl:col-span-4 md:col-span-6 col-span-12">
+          [1, 2, 3].map((index) => (
+            <div
+              key={index}
+              className="xl:col-span-4 md:col-span-6 col-span-12"
+            >
               <LoaderCard />
             </div>
           ))}
@@ -42,7 +45,10 @@ function Envelope() {
           </div>
         )}
         {data?.map((envelope) => (
-          <div className="xl:col-span-4 md:col-span-6 col-span-12">
+          <div
+            key={envelope.id}
+            className="xl:col-span-4 md:col-span-6 col-span-12"
+          >
             <EnvelopeCard envelope={envelope} />
           </div>
         ))}

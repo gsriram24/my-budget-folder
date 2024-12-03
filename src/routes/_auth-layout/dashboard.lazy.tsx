@@ -1,5 +1,6 @@
 import EnvelopeProgressBar from "@/components/custom/dashboard/envelope-progress-bar";
 import { EnvelopeSpendingCard } from "@/components/custom/dashboard/envelope-spending-chart";
+import { ExpenseStackedChart } from "@/components/custom/dashboard/expense-stacked-chart";
 
 import { useFetchEnvelopes } from "@/services/useEnvelope";
 import { useFetchExpense } from "@/services/useExpense";
@@ -19,12 +20,12 @@ function RouteComponent() {
   //   isFetching: isIncomeFetching,
   // } = useFetchIncome();
 
-  // const {
-  //   data: expenseData,
-  //   isError: isExpenseError,
-  //   error: expenseError,
-  //   isFetching: isExpenseFetching,
-  // } = useFetchExpense(0, 999, "month", "date", "desc");
+  const {
+    data: expenseData,
+    isError: isExpenseError,
+    error: expenseError,
+    isFetching: isExpenseFetching,
+  } = useFetchExpense(0, 999, "2-month", "date", "asc");
 
   const {
     data: envelopeData,
@@ -36,12 +37,22 @@ function RouteComponent() {
   return (
     <>
       <h1 className="text-3xl font-semibold">Overview</h1>
+
       <div className="grid grid-cols-12 gap-6 xl:gap-8 mt-8  auto-rows-min">
         <div className="xl:col-span-4 lg:col-span-6 col-span-12">
           {envelopeData && <EnvelopeSpendingCard envelopeData={envelopeData} />}
         </div>
         <div className="2xl:col-span-4 xl:col-span-8 lg:col-span-6 col-span-12">
           {envelopeData && <EnvelopeProgressBar envelopeData={envelopeData} />}
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-6 xl:gap-8 mt-8">
+        <div className="xl:col-span-8 col-span-12">
+          {expenseData && (
+            <ExpenseStackedChart
+              currentAndLastMonthExpenses={expenseData?.data!}
+            />
+          )}
         </div>
       </div>
     </>
