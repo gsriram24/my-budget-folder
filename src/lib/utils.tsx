@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns-tz";
 import { Expense } from "./types";
+import { useEffect } from "react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -115,4 +116,10 @@ export const generateCumulativeData = (
   ).filter((entry) => entry.thisMonthAmount || entry.prevMonthAmount);
 
   return combinedData;
+};
+
+export const useTitle = (title: string) => {
+  useEffect(() => {
+    document.title = `${title} - Budget Folder`;
+  }, [title]);
 };

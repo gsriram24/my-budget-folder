@@ -2,6 +2,7 @@ import AddEditEnvelopeDrawer from "@/components/custom/envelope/add-edit-envelop
 import EnvelopeCard from "@/components/custom/envelope/envelope-card";
 import ErrorMessage from "@/components/custom/error-message";
 import LoaderCard from "@/components/custom/loader-card";
+import { useTitle } from "@/lib/utils";
 import { useFetchEnvelopes } from "@/services/useEnvelope";
 
 import { createLazyFileRoute } from "@tanstack/react-router";
@@ -11,6 +12,8 @@ export const Route = createLazyFileRoute("/_auth-layout/envelopes")({
 });
 
 function Envelope() {
+  useTitle("Envelopes");
+
   const { data, isError, error, isFetching } = useFetchEnvelopes();
   const [open, setOpen] = useState(false);
   const handleOpen = (open: boolean) => {

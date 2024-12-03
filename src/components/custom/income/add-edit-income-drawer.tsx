@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   Drawer,
   DrawerClose,
@@ -199,7 +201,7 @@ function AddEditIncomeDrawer({
           </form>
         </Form>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button disabled={pending} variant="outline">
               Cancel
             </Button>

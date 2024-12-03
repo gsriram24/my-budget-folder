@@ -22,6 +22,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { useTitle } from "@/lib/utils";
 export const Route = createLazyFileRoute("/_public-layout/_unprotected/signup")(
   {
     component: Signup,
@@ -53,6 +54,8 @@ const formSchema = z
   });
 
 function Signup() {
+  useTitle("Signup");
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 

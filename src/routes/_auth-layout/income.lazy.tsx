@@ -5,12 +5,15 @@ import LoaderCard from "@/components/custom/loader-card";
 import { useFetchIncome } from "@/services/useIncome";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTitle } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth-layout/income")({
   component: Income,
 });
 
 function Income() {
+  useTitle("Income");
+
   const { data, isError, error, isFetching } = useFetchIncome();
   const [open, setOpen] = useState(false);
   const handleOpen = (open: boolean) => {

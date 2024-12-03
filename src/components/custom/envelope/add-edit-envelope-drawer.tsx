@@ -134,7 +134,7 @@ function AddEditEnvelopeDrawer({
           </form>
         </Form>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button disabled={pending} variant="outline">
               Cancel
             </Button>

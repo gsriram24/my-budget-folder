@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTitle } from "@/lib/utils";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { ArrowUpDownIcon, FilterIcon } from "lucide-react";
@@ -33,6 +34,8 @@ const sortOptions = [
 ];
 
 function RouteComponent() {
+  useTitle("Expenses");
+
   const [open, setOpen] = useState(false);
   const handleOpen = (open: boolean) => {
     setOpen(open);

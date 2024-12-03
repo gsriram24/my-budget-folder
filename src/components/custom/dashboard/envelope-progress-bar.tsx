@@ -30,9 +30,13 @@ function EnvelopeProgressBar({ envelopeData }: Props) {
               (envelope.monthlySpend / envelope.allocated_amount) * 100;
             return (
               <div key={envelope.id} className="mb-4">
-                <h3 className="text-lg font-medium">{envelope.name}</h3>
+                <div id={envelope.id} className="text-lg font-medium">
+                  {envelope.name}
+                </div>
                 <div className="mt-2">
                   <Progress
+                    aria-label={envelope.name}
+                    aria-labelledby={envelope.id}
                     color={pieChartColors[index % pieChartColors.length]}
                     value={progress}
                   />

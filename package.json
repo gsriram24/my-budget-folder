@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo.svg"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -26,6 +27,7 @@
     "@tanstack/react-query": "^5.61.0",
     "@tanstack/react-router": "^1.81.14",
     "@tanstack/react-table": "^8.20.5",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -39,10 +41,11 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.1",
+    "vite-plugin-pwa": "^0.21.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.13.0",
+    "@eslint/js": "^9.14.0",
     "@tanstack/router-devtools": "^1.81.14",
     "@tanstack/router-plugin": "^1.81.9",
     "@types/node": "^22.9.0",
