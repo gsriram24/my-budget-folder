@@ -61,7 +61,7 @@ export const fetchEnvelopes = async () => {
     .select(
       `id, name, allocated_amount, monthlySpend: expense ( amount.sum() )`,
     )
-    .gte("expense.date", getOneMonthAgo().toLocaleString())
+    .gte("expense.date", getOneMonthAgo().toLocaleString("en-US"))
     .order("created_at");
   if (error) {
     throw error;

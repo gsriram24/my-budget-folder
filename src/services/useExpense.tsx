@@ -23,7 +23,7 @@ const invalidateQuery = (queryClient: QueryClient) => {
 };
 
 const addExpense = async (expense: AddExpense) => {
-  const date = expense.date.toLocaleDateString();
+  const date = expense.date.toLocaleDateString("en-US");
   const { error } = await supabase
     .from("expense")
     .insert({ ...expense, date })
@@ -105,7 +105,7 @@ export const fetchExpenses = async (
         count: "exact",
       },
     )
-    .gte("date", date.toLocaleString())
+    .gte("date", date.toLocaleString("en-US"))
     .order(sortValue, { ascending: sortOrder === "asc" })
     .range(from, to - 1);
 
