@@ -23,7 +23,7 @@ Welcome to the open source repository of Budget Folder, your personal finance ma
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/your-username/budget-folder.git
+   git clone https://github.com/gsriram24/budget-folder.git
    cd budget-folder
    ```
 
