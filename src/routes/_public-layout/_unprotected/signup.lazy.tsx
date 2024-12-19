@@ -176,7 +176,10 @@ function Signup() {
                 <FormItem>
                   <FormLabel className="mb-0">Preferred Currency</FormLabel>
                   <FormControl>
-                    <Select {...field}>
+                    <Select
+                      {...field}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
                       <SelectTrigger>
                         {
                           currencyCode[field.value as keyof typeof currencyCode]
@@ -186,7 +189,7 @@ function Signup() {
                       </SelectTrigger>
                       <SelectContent>
                         {currencyOptions.map((option) => (
-                          <SelectItem value={option}>
+                          <SelectItem key={option} value={option}>
                             {
                               currencyCode[option as keyof typeof currencyCode]
                                 .name
