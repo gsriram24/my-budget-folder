@@ -31,9 +31,18 @@ export function useCurrencyHelper() {
     getCurrency: () => currency,
   };
 }
+export const getTimeAdjustedDate = (date: string | Date) => {
+  const dt = new Date(date);
+
+  const dtDateOnly = new Date(
+    dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000,
+  );
+  return dtDateOnly;
+};
 
 export function formatDate(date: Date | string) {
-  return format(date, "do MMM yyyy", { timeZone: "UTC" });
+  const dtDateOnly = getTimeAdjustedDate(date);
+  return format(dtDateOnly, "do MMM yyyy");
 }
 
 export const generateCumulativeData = (

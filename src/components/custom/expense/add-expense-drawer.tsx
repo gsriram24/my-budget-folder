@@ -35,6 +35,7 @@ import { useFetchEnvelopes } from "@/services/useEnvelope";
 import ErrorMessage from "../error-message";
 import { DatePicker } from "../date-picker";
 import { useCallback, useEffect } from "react";
+import { getTimeAdjustedDate } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().max(255).min(1, "Name is required"),
@@ -63,10 +64,11 @@ function AddEditExpenseDrawer({
     isFetching,
   } = useFetchEnvelopes();
   const getDefaultValues = useCallback(() => {
+    const dt = expense?.date ? getTimeAdjustedDate(expense.date) : new Date();
     return {
       title: expense?.title || "",
       amount: expense?.amount || 0,
-      date: new Date(),
+      date: dt,
       envelope: expense?.envelope || "",
     };
   }, [expense]);
@@ -207,7 +209,6 @@ function AddEditExpenseDrawer({
                         selectDate={field.onChange}
                       />
                     </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
