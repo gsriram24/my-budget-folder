@@ -52,9 +52,9 @@ export function useAddIncome(income: AddIncome, handleClose: () => void) {
 }
 
 export const fetchIncomes = async () => {
-  var date = new Date();
+  const date = new Date();
 
-  var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
 
   const { data, error } = await supabase
     .from("income")
