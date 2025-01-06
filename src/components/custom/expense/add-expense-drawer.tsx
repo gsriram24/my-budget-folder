@@ -206,15 +206,23 @@ function AddEditExpenseDrawer({
                     <FormControl>
                       <DatePicker
                         date={field.value}
-                        selectDate={field.onChange}
+                        selectDate={(value) => {
+                          if (!value) return;
+                          const utcDate = new Date(
+                            value.getTime() - value.getTimezoneOffset() * 60000,
+                          );
+                          form.setValue("date", utcDate);
+                        }}
                       />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
           </form>
+          {form.getValues().date.toString()}
         </Form>
         <DrawerFooter>
           <DrawerClose asChild>
